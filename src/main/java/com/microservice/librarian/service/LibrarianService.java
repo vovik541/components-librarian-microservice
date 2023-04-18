@@ -4,10 +4,12 @@ import com.microservice.librarian.entity.Book;
 import com.microservice.librarian.entity.dto.BookDTO;
 import com.microservice.librarian.mapper.BookMapper;
 import com.microservice.librarian.repository.BookRepository;
+import com.microservice.librarian.response.BooksListResponse;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -20,11 +22,11 @@ public class LibrarianService {
     @Autowired
     private BookRepository bookRepository;
 
-    public Book addBook(Book book){
-        return bookRepository.save(book);
+    public BookDTO addBook(BookDTO book){
+        return mapper.bookToBookDTO(bookRepository.save(mapper.bookDTOToBook(book)));
     }
-    public List<Book> findAllBooks() {
-        return bookRepository.findAll();
+    public BooksListResponse findAllBooks() {
+        return new BooksListResponse(mapper.booksToBookDTOs(bookRepository.findAll()));
     }
 
     public BookDTO findById(Long id){
@@ -34,8 +36,8 @@ public class LibrarianService {
         bookRepository.deleteById(id);
     }
 
-    public void updateBook(Book book){
-        bookRepository.save(book);
+    public void updateBook(BookDTO book){
+        bookRepository.save(mapper.bookDTOToBook(book));
     }
 
 }
