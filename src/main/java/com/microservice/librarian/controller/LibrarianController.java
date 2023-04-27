@@ -15,6 +15,7 @@ import java.util.List;
 
 @Controller
 @AllArgsConstructor
+@RequestMapping("/v1")
 public class LibrarianController {
 
     @Autowired
