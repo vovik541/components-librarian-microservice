@@ -32,7 +32,7 @@ public class LibrarianController {
         return librarianService.findAllBooks();
     }
     @Operation(summary = "Add new book")
-    @PostMapping("/add_book")
+    @PostMapping("/addBook")
     public @ResponseBody BookDTO addBook(@RequestBody BookDTO book) {
         return librarianService.addBook(book);
     }
