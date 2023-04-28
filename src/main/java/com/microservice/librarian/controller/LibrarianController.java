@@ -20,7 +20,7 @@ import java.util.List;
 
 @Controller
 @AllArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/librarians")
 public class LibrarianController {
 
     @Autowired
@@ -68,17 +68,17 @@ public class LibrarianController {
         return librarianService.addBook(book);
     }
     @Operation(summary = "Delete book by id")
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/deleteBook/{id}")
     public @ResponseBody void deleteBook(@PathVariable(name = "id") Long id) {
         librarianService.deleteBookById(id);
     }
     @Operation(summary = "Get book by id for editing")
-    @GetMapping("/edit/{id}")
+    @GetMapping("/editBook/{id}")
     public @ResponseBody BookDTO updateRedirectBook(@PathVariable(name = "id") Long id) {
         return librarianService.findById(id);
     }
     @Operation(summary = "Update book by id")
-    @PostMapping("/update/{id}")
+    @PostMapping("/updateBook/{id}")
     public @ResponseBody void updateBook(@RequestBody BookDTO book) {
         librarianService.updateBook(book);
     }
