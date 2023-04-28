@@ -2,10 +2,14 @@ package com.microservice.librarian.controller;
 
 import com.microservice.librarian.entity.Book;
 import com.microservice.librarian.entity.dto.BookDTO;
+import com.microservice.librarian.error.NotAllowedBookName;
 import com.microservice.librarian.mapper.BookMapper;
 import com.microservice.librarian.response.BooksListResponse;
 import com.microservice.librarian.service.LibrarianService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +35,36 @@ public class LibrarianController {
     public BooksListResponse redirectEditing() {
         return librarianService.findAllBooks();
     }
-    @Operation(summary = "Add new book")
+    @Operation(summary = "Add new book",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Book added",
+                            content = {
+                                    @Content(
+                                            mediaType = "application/json",
+                                            schema = @Schema(implementation = BookDTO.class)
+                                    )
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Not allowed book name",
+                            content = {
+                                    @Content(
+                                            mediaType = "application/json",
+                                            schema = @Schema(implementation = NotAllowedBookName.class)
+                                    )
+                            }
+                    )
+            })
     @PostMapping("/addBook")
-    public @ResponseBody BookDTO addBook(@RequestBody BookDTO book) {
+    public @ResponseBody BookDTO addBook(@RequestBody BookDTO book) throws NotAllowedBookName {
+
+        if (book.getBookName().equals("not allowed")){
+            throw new NotAllowedBookName();
+        }
+
         return librarianService.addBook(book);
     }
     @Operation(summary = "Delete book by id")
